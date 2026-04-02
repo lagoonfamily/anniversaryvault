@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story · Gabe & Laura</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --coral:        #c9776b;
+            --coral-light:  #e4a898;
+            --coral-pale:   #f5ddd8;
+            --gold:         #c9a14a;
+            --text-dark:    #2a1a10;
+            --text-med:     #6b4530;
+            --text-light:   #9a7060;
+            --glass:        rgba(255, 248, 240, 0.58);
+            --glass-strong: rgba(255, 248, 240, 0.82);
+            --border:       rgba(255, 210, 170, 0.35);
+            --border-hover: rgba(201, 119, 107, 0.50);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: #5a2838;
+            position: relative;
+        }
+
+        /* ── MUTED SUNSET GRADIENT ── */
+        #bg-scene {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        }
+        .bg-sky {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom,
+                #1e0e18  0%,
+                #3a1828  8%,
+                #5c2838 16%,
+                #7e3840 24%,
+                #9e5048 32%,
+                #b86858 40%,
+                #c87858 48%,
+                #cc8858 56%,
+                #c48850 64%,
+                #b87c48 72%,
+                #a87040 80%,
+                #906038 88%,
+                #785030 96%,
+                #6a4828 100%
+            );
+        }
+        .bg-glow {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse 80% 40% at 50% 52%,
+                rgba(210,155,100,0.22) 0%,
+                rgba(190,130, 80,0.10) 45%,
+                transparent 70%
+            );
+        }
+        .bg-overlay {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse 100% 100% at 50% 50%,
+                transparent 55%, rgba(10,4,8,0.35) 100%
+            );
+        }
+
+        /* ── PASSWORD GATE ── */
+        #gate {
+            position: fixed; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 200;
+            background: linear-gradient(to bottom,
+                #1e0e18 0%, #3a1828 8%, #5c2838 16%, #7e3840 24%,
+                #9e5048 32%, #b86858 40%, #c87858 48%, #cc8858 56%,
+                #c48850 64%, #b87c48 72%, #a87040 80%, #906038 88%, #6a4828 100%
+            );
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        #gate.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        .gate-box { text-align: center; padding: 3rem 2rem; max-width: 430px; width: 90%; }
+        .gate-icon { font-size: 2.8rem; display: block; margin-bottom: 1.6rem; animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-10px) rotate(5deg)} }
+
+        .gate-title {
+            font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: clamp(2.4rem, 6vw, 3.8rem); color: #fff;
+            text-shadow: 0 2px 30px rgba(0,0,0,0.4); line-height: 1.1; margin-bottom: 0.5rem;
+        }
+        .gate-names { font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.82); margin-bottom: 0.4rem; }
+        .gate-date  { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.85rem; color: rgba(255,255,255,0.70); margin-bottom: 2rem; }
+
+        .orn { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 2rem; }
+        .orn-line  { height: 1px; width: 50px; background: rgba(255,255,255,0.4); }
+        .orn-heart { color: rgba(255,255,255,0.88); font-size: 0.9rem; }
+
+        .gate-hint { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-bottom: 0.9rem; }
+        .pw-input {
+            width: 100%; padding: 1rem 1.8rem; display: block;
+            border: 1.5px solid rgba(255,255,255,0.45); border-radius: 60px;
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(12px);
+            font-family: 'Montserrat', sans-serif; font-size: 1.1rem;
+            letter-spacing: 0.3em; color: #fff; text-align: center; outline: none;
+            transition: all 0.3s; margin-bottom: 1rem;
+        }
+        .pw-input::placeholder { color: rgba(255,255,255,0.5); }
+        .pw-input:focus { border-color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.25); }
+        .pw-input.shake { animation: shake 0.45s ease; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 18%{transform:translateX(-9px)} 36%{transform:translateX(9px)} 54%{transform:translateX(-6px)} 72%{transform:translateX(6px)} }
+
+        .enter-btn {
+            width: 100%; padding: 1rem 2rem;
+            background: rgba(255,255,255,0.20); backdrop-filter: blur(10px);
+            color: #fff; border: 1.5px solid rgba(255,255,255,0.55); border-radius: 60px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 600;
+            letter-spacing: 0.32em; text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+        }
+        .enter-btn:hover { background: rgba(255,255,255,0.35); transform: translateY(-2px); }
+        .gate-footer { margin-top: 2.5rem; font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: rgba(255,255,255,0.58); }
+
+        /* ── APP ── */
+        #app { position: relative; z-index: 1; opacity: 0; transition: opacity 1.2s ease; min-height: 100vh; }
+        #app.visible { opacity: 1; }
+
+        .tab-nav { display: flex; justify-content: center; padding: 2.5rem 1rem 0; }
+        .tab-btn {
+            padding: 0.65rem 1.8rem; cursor: pointer; border: none; transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 600;
+            letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.80);
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(12px);
+        }
+        .tab-btn:first-child { border-radius: 30px 0 0 30px; border: 1.5px solid rgba(255,255,255,0.28); border-right: none; }
+        .tab-btn:last-child  { border-radius: 0 30px 30px 0; border: 1.5px solid rgba(255,255,255,0.28); border-left: none; }
+        .tab-btn.active { background: var(--coral); color: #fff; border-color: var(--coral); box-shadow: 0 4px 18px rgba(201,119,107,0.45); }
+        .tab-btn:not(.active):hover { background: rgba(255,255,255,0.28); color: #fff; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── VAULT HEADER ── */
+        .vault-header { text-align: center; padding: 3rem 2rem 1.5rem; }
+        .vault-title {
+            font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: clamp(2.2rem, 5vw, 3.4rem); color: #fff;
+            text-shadow: 0 2px 30px rgba(0,0,0,0.45); margin-bottom: 0.5rem; line-height: 1.1;
+        }
+        .vault-names  { font-size: 0.7rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,255,255,0.85); margin-bottom: 0.35rem; }
+        .vault-date   { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.88rem; color: rgba(255,255,255,0.70); margin-bottom: 1.6rem; }
+
+        .divider { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1.5rem; }
+        .div-line   { height: 1px; width: 70px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.5)); }
+        .div-line.r { background: linear-gradient(to left,  transparent, rgba(255,255,255,0.5)); }
+        .div-heart  { color: rgba(255,255,255,0.85); font-size: 0.95rem; }
+
+        .vault-intro {
+            max-width: 480px; margin: 0 auto 3rem;
+            font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: 0.95rem; line-height: 1.95; color: rgba(255,255,255,0.80); padding: 0 1rem;
+        }
+
+        /* ── MILESTONE CARDS ── */
+        .milestones-grid {
+            max-width: 980px; margin: 0 auto; padding: 0 1.5rem 2rem;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 1.6rem;
+        }
+        @media (max-width: 580px) { .milestones-grid { grid-template-columns: 1fr; } }
+
+        .m-card {
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px; border: 1.5px solid var(--border);
+            padding: 2.2rem 1.8rem 2rem; text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.4s; position: relative; overflow: hidden;
+        }
+        .m-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(145deg, rgba(255,255,255,0.4) 0%, transparent 60%); border-radius: inherit; pointer-events: none; }
+        .m-card:hover { transform: translateY(-5px); box-shadow: 0 14px 45px rgba(0,0,0,0.25); border-color: var(--border-hover); }
+        .m-card.is-unlocked { border-color: rgba(201,119,107,0.55); background: var(--glass-strong); }
+        .m-card.gold-card     { border-color: rgba(201,161,74,0.4); }
+        .m-card.gold-card .year-badge     { background: linear-gradient(135deg, #c9a14a, #9a7020); }
+        .m-card.platinum-card { border-color: rgba(160,170,190,0.5); }
+        .m-card.platinum-card .year-badge { background: linear-gradient(135deg, #b0b8c8, #808fa8); }
+
+        .year-badge {
+            display: inline-block; padding: 0.28rem 1.1rem;
+            background: linear-gradient(135deg, var(--coral-light), var(--coral));
+            color: #fff; border-radius: 60px; font-size: 0.62rem; font-weight: 600;
+            letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .card-title { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1.5rem; line-height: 1.3; }
+
+        .hlw { width: 88px; height: 88px; margin: 0 auto 1.5rem; }
+        .hlw svg { width: 100%; height: 100%; transition: filter 0.5s; }
+        .hlw.locked svg { filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2)); }
+        .hlw.unlocking svg { animation: heartbeat 0.65s ease; }
+        @keyframes heartbeat { 0%{transform:scale(1)} 20%{transform:scale(1.35)} 45%{transform:scale(0.88)} 65%{transform:scale(1.22)} 80%{transform:scale(0.95)} 100%{transform:scale(1)} }
+        .hlw.unlocked-glow svg { animation: pulse-glow 2.5s ease-in-out infinite; }
+        @keyframes pulse-glow { 0%,100%{filter:drop-shadow(0 0 8px rgba(201,119,107,0.55))} 50%{filter:drop-shadow(0 0 22px rgba(201,119,107,0.95)) drop-shadow(0 0 35px rgba(201,119,107,0.35))} }
+
+        .reveal-btn {
+            background: transparent; border: 1.5px solid rgba(201,119,107,0.45); color: var(--coral);
+            padding: 0.62rem 1.6rem; border-radius: 60px; font-family: 'Montserrat', sans-serif;
+            font-size: 0.67rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .reveal-btn:hover { background: var(--coral); color: #fff; box-shadow: 0 4px 16px rgba(201,119,107,0.35); }
+
+        .unlock-section { display: none; margin-top: 0.5rem; }
+        .unlock-section.show { display: block; animation: slide-up 0.4s ease; }
+        @keyframes slide-up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+        .m-question { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.88rem; color: var(--text-med); margin-bottom: 1rem; line-height: 1.7; }
+        .ans-input {
+            width: 100%; padding: 0.75rem 1.3rem;
+            border: 1.5px solid rgba(201,119,107,0.30); border-radius: 60px;
+            background: rgba(255,255,255,0.75); font-family: 'Montserrat', sans-serif;
+            font-size: 0.82rem; color: var(--text-dark); text-align: center;
+            outline: none; transition: all 0.3s; margin-bottom: 0.75rem;
+        }
+        .ans-input:focus { border-color: var(--coral); background: rgba(255,255,255,0.92); box-shadow: 0 0 0 3px rgba(201,119,107,0.1); }
+        .ans-input.wrong { animation: shake 0.45s ease; border-color: #c03838 !important; }
+
+        .unlock-btn {
+            width: 100%; padding: 0.78rem 1.5rem;
+            background: linear-gradient(135deg, #c9776b, #a85e54); color: #fff; border: none;
+            border-radius: 60px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem;
+            font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase;
+            cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(201,119,107,0.3);
+        }
+        .unlock-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,119,107,0.45); }
+
+        .err-msg { font-size: 0.68rem; color: #b03838; margin-top: 0.5rem; font-style: italic; display: none; }
+        .err-msg.show { display: block; }
+
+        .video-content { display: none; margin-top: 1.6rem; }
+        .video-content.show { display: block; animation: slide-up 0.65s ease; }
+        .unlock-note { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.88rem; color: var(--coral); margin-bottom: 1.1rem; line-height: 1.7; }
+        .vid-wrap { position: relative; width: 100%; padding-bottom: 56.25%; border-radius: 14px; overflow: hidden; background: rgba(245,220,180,0.5); }
+        .vid-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        .vid-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 14px; background: linear-gradient(135deg, rgba(250,230,190,0.9), rgba(230,200,140,0.85)); }
+        .vid-placeholder .ph-icon { font-size: 2.2rem; margin-bottom: 0.4rem; }
+        .vid-placeholder .ph-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.82rem; color: var(--text-med); }
+
+        /* ── VAULT FOOTER ── */
+        .vault-footer { text-align: center; padding: 3.5rem 2rem 2.5rem; }
+        .footer-waves { display: block; font-size: 1.3rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.55); margin-bottom: 1rem; }
+        .footer-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.95rem; line-height: 1.85; color: rgba(255,255,255,0.82); max-width: 400px; margin: 0 auto 1rem; }
+        .footer-heart { color: rgba(255,255,255,0.7); font-size: 1.1rem; }
+
+        /* ── JOURNAL ── */
+        .journal-header { text-align: center; padding: 3rem 2rem 1.5rem; }
+        .journal-title { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.9rem, 4.5vw, 3rem); color: #fff; text-shadow: 0 2px 25px rgba(0,0,0,0.45); margin-bottom: 0.4rem; }
+        .journal-sub  { font-size: 0.68rem; letter-spacing: 0.38em; text-transform: uppercase; color: rgba(255,255,255,0.75); margin-bottom: 1.4rem; }
+        .journal-intro { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.88rem; color: rgba(255,255,255,0.70); line-height: 1.85; max-width: 440px; margin: 0 auto 2.5rem; }
+
+        .journal-grid {
+            max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+        }
+        @media (max-width: 620px) { .journal-grid { grid-template-columns: 1fr; } }
+
+        .j-box {
+            background: var(--glass); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border-radius: 18px; border: 1.5px solid var(--border);
+            padding: 1.2rem 1.25rem 1.3rem; transition: box-shadow 0.3s, border-color 0.3s;
+        }
+        .j-box:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.2); border-color: var(--border-hover); }
+        .j-box.has-entry { border-color: rgba(201,119,107,0.4); background: rgba(255,248,240,0.68); }
+        .j-box.milestone-gold { border-color: rgba(201,161,74,0.4); }
+        .j-box.milestone-gold .j-badge { background: linear-gradient(135deg, #c9a14a, #9a7020); }
+
+        .j-box-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.9rem; }
+        .j-badge {
+            padding: 0.2rem 0.8rem; border-radius: 60px;
+            font-size: 0.6rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #fff;
+            background: linear-gradient(135deg, var(--coral-light), var(--coral));
+        }
+        .j-saved-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); opacity: 0; transition: opacity 0.3s; }
+        .j-box.has-entry .j-saved-dot { opacity: 1; }
+
+        .j-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.4rem; display: block; }
+        .j-text {
+            width: 100%; min-height: 68px; padding: 0.65rem 0.85rem;
+            border: 1.5px solid rgba(201,119,107,0.22); border-radius: 10px;
+            background: rgba(255,255,255,0.68); font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem; color: var(--text-dark); line-height: 1.65;
+            outline: none; resize: none; transition: all 0.3s; margin-bottom: 0.7rem;
+        }
+        .j-text:focus { border-color: var(--coral); background: rgba(255,255,255,0.92); box-shadow: 0 0 0 3px rgba(201,119,107,0.08); }
+        .j-text::placeholder { color: var(--text-light); font-style: italic; }
+
+        .j-photo-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+        .j-upload-label {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.42rem 0.85rem; border: 1.5px dashed rgba(201,119,107,0.38);
+            border-radius: 8px; background: rgba(255,255,255,0.5); color: var(--coral);
+            font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 500;
+            letter-spacing: 0.08em; cursor: pointer; transition: all 0.3s; white-space: nowrap;
+        }
+        .j-upload-label:hover { background: rgba(255,255,255,0.8); border-color: var(--coral); }
+        .j-file-input { display: none; }
+
+        .j-thumb { position: relative; width: 46px; height: 46px; border-radius: 8px; overflow: hidden; border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 2px 8px rgba(0,0,0,0.18); flex-shrink: 0; }
+        .j-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .j-thumb-remove { position: absolute; top: 1px; right: 1px; background: rgba(160,30,30,0.78); color: #fff; border: none; border-radius: 50%; width: 15px; height: 15px; font-size: 0.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .j-auto-saved { font-size: 0.6rem; color: var(--coral); font-style: italic; margin-top: 0.45rem; height: 14px; transition: opacity 0.5s; opacity: 0; }
+        .j-auto-saved.show { opacity: 1; }
+
+        .journal-footer { text-align: center; padding: 0.5rem 2rem 3rem; }
+        .j-export-btn {
+            padding: 0.7rem 2rem; background: rgba(255,255,255,0.22); backdrop-filter: blur(10px);
+            color: rgba(255,255,255,0.88); border: 1.5px solid rgba(255,255,255,0.4); border-radius: 60px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+        }
+        .j-export-btn:hover { background: rgba(255,255,255,0.38); transform: translateY(-1px); }
+        .j-export-note { font-size: 0.65rem; color: rgba(255,255,255,0.5); margin-top: 0.6rem; font-style: italic; font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body>
+
+    <div id="bg-scene">
+        <div class="bg-sky"></div>
+        <div class="bg-glow"></div>
+        <div class="bg-overlay"></div>
+    </div>
+
+    <!-- PASSWORD GATE -->
+    <div id="gate">
+        <div class="gate-box">
+            <span class="gate-icon">🌊</span>
+            <h1 class="gate-title">Our Love Story</h1>
+            <p class="gate-names">Gabe + Laura</p>
+            <p class="gate-date">04 · 12 · 2025 &nbsp;·&nbsp; Forever &amp; Always</p>
+            <div class="orn">
+                <span class="orn-line"></span>
+                <span class="orn-heart">♥</span>
+                <span class="orn-line"></span>
+            </div>
+            <p class="gate-hint">Enter the key to our story</p>
+            <input type="password" class="pw-input" id="pw-input" placeholder="· · · · · ·" autocomplete="off" spellcheck="false"/>
+            <button class="enter-btn" id="enter-btn">Open the Vault</button>
+            <p class="gate-footer">A gift sealed with every piece of my heart · Laura</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app">
+
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="vault">♥ Our Love Story</button>
+            <button class="tab-btn" data-tab="journal">✦ Anniversary Journal</button>
+        </nav>
+
+        <!-- VAULT TAB -->
+        <div class="tab-panel active" id="tab-vault">
+            <header class="vault-header">
+                <h1 class="vault-title">Our Love Story</h1>
+                <p class="vault-names">Gabe + Laura</p>
+                <p class="vault-date">04 · 12 · 2025 &nbsp;·&nbsp; Forever &amp; Always</p>
+                <div class="divider">
+                    <span class="div-line"></span><span class="div-heart">♥</span><span class="div-line r"></span>
+                </div>
+                <p class="vault-intro">
+                    Happy Anniversary my love!<br><br>
+                    There's a memory sealed behind each heart, to unlock it you'll have to answer each question correctly.
+                </p>
+            </header>
+            <div class="milestones-grid" id="milestones-grid"></div>
+            <footer class="vault-footer">
+                <span class="footer-waves">〰 〰 〰</span>
+                <p class="footer-quote">A gift made for you with all my heart ♥</p>
+                <span class="footer-heart">♥</span>
+            </footer>
+        </div>
+
+        <!-- JOURNAL TAB -->
+        <div class="tab-panel" id="tab-journal">
+            <header class="journal-header">
+                <h1 class="journal-title">Anniversary Journal</h1>
+                <p class="journal-sub">Gabe + Laura · Every Chapter</p>
+                <div class="divider">
+                    <span class="div-line"></span><span class="div-heart">♥</span><span class="div-line r"></span>
+                </div>
+                <p class="journal-intro">
+                    "Every year deserves to be remembered. Write how you celebrated and add a photo — so you never forget a single chapter of your story."
+                </p>
+            </header>
+            <div class="journal-grid" id="journal-grid"></div>
+            <div class="journal-footer">
+                <button class="j-export-btn" onclick="exportJournal()">↓ Save Journal to File</button>
+                <p class="j-export-note">Download a backup so your memories are never lost</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const VAULT_PASSWORD = "lagoon";
+
+        const milestones = [
+            { id:"yr1",   badge:"Year 1",   title:"First Anniversary",     style:"",
+              question:"Where was our first kiss?",               answer:"the car",
+              videoUrl:"https://www.youtube.com/embed/ibWOGZiQr2Q",
+              note:"Happy first anniversary, my love. One year down, forever to go. 🌊" },
+            { id:"yr5",   badge:"Year 5",   title:"Fifth Anniversary",      style:"",
+              question:"Where was our first apartment together?",  answer:"winter park",
+              videoUrl:"https://www.youtube.com/embed/2bWgky0hvoc",
+              note:"Five years of the most beautiful, wild, sun-soaked adventure. ♥" },
+            { id:"yr10",  badge:"Year 10",  title:"Tenth Anniversary",      style:"",
+              question:"Where was our first international trip?",  answer:"iceland",
+              videoUrl:"https://www.youtube.com/embed/eaC46wdK70s",
+              note:"A whole decade of loving you. I'd choose you a thousand times over." },
+            { id:"yr25",  badge:"Year 25",  title:"Silver Anniversary",     style:"gold-card",
+              question:"Where did we get married?",               answer:"sarasota",
+              videoUrl:"https://www.youtube.com/embed/Hpv7fPcQfXs",
+              note:"Twenty-five years. You are still my greatest adventure and my greatest home." },
+            { id:"yr50",  badge:"Year 50",  title:"Golden Anniversary",     style:"gold-card",
+              question:"Where did we meet?",                      answer:"fau",
+              videoUrl:"https://www.youtube.com/embed/IRW-v8F7Lhs",
+              note:"Fifty years of loving you. A lifetime of tides, sunsets, and you. Always you." },
+            { id:"yr100", badge:"Year 100", title:"Centennial Anniversary", style:"platinum-card",
+              question:"How many years have we been in love?",    answer:"100",
+              videoUrl:"https://www.youtube.com/embed/GhiNR2tGm4w",
+              note:"One hundred years. Our love story is the greatest one ever told. ♥" }
+        ];
+
+        const goldYears = new Set([25, 50]);
+        const journalYears = Array.from({ length: 50 }, (_, i) => ({
+            num: i + 1, id: 'jy' + (i + 1), badge: 'Year ' + (i + 1),
+            isGold: goldYears.has(i + 1)
+        }));
+
+        /* Heart SVGs */
+        function lockedSVG(id) {
+            return `<svg viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="lg-${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#f0c878"/><stop offset="100%" stop-color="#d0a050"/>
+                </linearGradient></defs>
+                <path d="M50,84 C50,84 6,53 6,27 C6,13.5 17,5 29,5 C38.5,5 46.5,10.5 50,18 C53.5,10.5 61.5,5 71,5 C83,5 94,13.5 94,27 C94,53 50,84 50,84Z" fill="url(#lg-${id})" opacity="0.72"/>
+                <rect x="37" y="43" width="26" height="21" rx="5" fill="rgba(255,255,255,0.82)"/>
+                <path d="M43.5,43 L43.5,35.5 C43.5,29.5 56.5,29.5 56.5,35.5 L56.5,43" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="4.5" stroke-linecap="round"/>
+                <circle cx="50" cy="52.5" r="3.8" fill="rgba(180,120,60,0.55)"/>
+                <rect x="48.4" y="54.5" width="3.2" height="5" rx="1.2" fill="rgba(180,120,60,0.55)"/>
+            </svg>`;
+        }
+
+        function unlockedSVG(id) {
+            return `<svg viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="ulg-${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#e4a898"/>
+                        <stop offset="50%" stop-color="#c9776b"/>
+                        <stop offset="100%" stop-color="#a85e54"/>
+                    </linearGradient>
+                    <radialGradient id="gw-${id}" cx="50%" cy="42%" r="50%">
+                        <stop offset="0%" stop-color="rgba(255,220,200,0.65)"/>
+                        <stop offset="100%" stop-color="rgba(255,220,200,0)"/>
+                    </radialGradient>
+                </defs>
+                <path d="M50,84 C50,84 6,53 6,27 C6,13.5 17,5 29,5 C38.5,5 46.5,10.5 50,18 C53.5,10.5 61.5,5 71,5 C83,5 94,13.5 94,27 C94,53 50,84 50,84Z" fill="url(#ulg-${id})"/>
+                <path d="M50,84 C50,84 6,53 6,27 C6,13.5 17,5 29,5 C38.5,5 46.5,10.5 50,18 C53.5,10.5 61.5,5 71,5 C83,5 94,13.5 94,27 C94,53 50,84 50,84Z" fill="url(#gw-${id})"/>
+                <text x="50" y="54" text-anchor="middle" font-size="22" fill="rgba(255,255,255,0.92)" style="font-family:serif;">✦</text>
+            </svg>`;
+        }
+
+        /* Build vault */
+        function buildVault() {
+            const grid = document.getElementById('milestones-grid');
+            milestones.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'm-card' + (m.style ? ' ' + m.style : '');
+                card.id = 'card-' + m.id;
+                card.innerHTML = `
+                    <div class="year-badge">${m.badge}</div>
+                    <h2 class="card-title">${m.title}</h2>
+                    <div class="hlw locked" id="hlw-${m.id}">${lockedSVG(m.id)}</div>
+                    <div id="rw-${m.id}">
+                        <button class="reveal-btn" data-id="${m.id}">Unlock This Memory</button>
+                    </div>
+                    <div class="unlock-section" id="us-${m.id}">
+                        <p class="m-question">"${m.question}"</p>
+                        <input type="text" class="ans-input" id="ai-${m.id}" placeholder="Type your answer…" autocomplete="off" spellcheck="false"/>
+                        <button class="unlock-btn" data-id="${m.id}">Open ♥</button>
+                        <p class="err-msg" id="em-${m.id}">That doesn't seem right, my love — try again ♥</p>
+                    </div>
+                    <div class="video-content" id="vc-${m.id}">
+                        <p class="unlock-note" id="un-${m.id}"></p>
+                        <div class="vid-wrap" id="vw-${m.id}">
+                            <div class="vid-placeholder" id="vp-${m.id}">
+                                <span class="ph-icon">🎬</span>
+                                <p class="ph-text">Your video is on its way…</p>
+                            </div>
+                        </div>
+                    </div>`;
+                grid.appendChild(card);
+            });
+            grid.addEventListener('click', e => {
+                const rb = e.target.closest('.reveal-btn');
+                const ub = e.target.closest('.unlock-btn');
+                if (rb) showQuestion(rb.dataset.id);
+                if (ub) checkAnswer(ub.dataset.id);
+            });
+            grid.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    const inp = e.target.closest('.ans-input');
+                    if (inp) checkAnswer(inp.id.replace('ai-', ''));
+                }
+            });
+        }
+
+        function showQuestion(id) {
+            document.getElementById('rw-' + id).style.display = 'none';
+            document.getElementById('us-' + id).classList.add('show');
+            setTimeout(() => document.getElementById('ai-' + id).focus(), 80);
+        }
+
+        function checkAnswer(id) {
+            const m   = milestones.find(x => x.id === id);
+            const inp = document.getElementById('ai-' + id);
+            const em  = document.getElementById('em-' + id);
+            if (inp.value.trim().toLowerCase() === m.answer.toLowerCase()) {
+                em.classList.remove('show');
+                unlockMilestone(id, m);
+            } else {
+                inp.classList.add('wrong');
+                em.classList.add('show');
+                setTimeout(() => inp.classList.remove('wrong'), 500);
+            }
+        }
+
+        function unlockMilestone(id, m) {
+            const hlw  = document.getElementById('hlw-' + id);
+            const us   = document.getElementById('us-' + id);
+            const vc   = document.getElementById('vc-' + id);
+            const card = document.getElementById('card-' + id);
+            hlw.classList.remove('locked');
+            hlw.classList.add('unlocking');
+            setTimeout(() => {
+                hlw.innerHTML = unlockedSVG(id);
+                hlw.classList.remove('unlocking');
+                hlw.classList.add('unlocked-glow');
+                card.classList.add('is-unlocked');
+                us.style.display = 'none';
+                const noteEl = document.getElementById('un-' + id);
+                if (m.note) noteEl.textContent = m.note;
+                if (m.videoUrl) {
+                    document.getElementById('vp-' + id).style.display = 'none';
+                    const iframe = document.createElement('iframe');
+                    iframe.src = m.videoUrl + '?rel=0&modestbranding=1';
+                    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                    iframe.allowFullscreen = true;
+                    document.getElementById('vw-' + id).appendChild(iframe);
+                }
+                vc.classList.add('show');
+                setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+            }, 650);
+        }
+
+        /* Build journal */
+        function buildJournal() {
+            const grid = document.getElementById('journal-grid');
+            journalYears.forEach(y => {
+                const saved = loadJEntry(y.id);
+                let boxClass = 'j-box';
+                if (y.isGold) boxClass += ' milestone-gold';
+                if (saved && saved.text) boxClass += ' has-entry';
+                const box = document.createElement('div');
+                box.className = boxClass; box.id = 'jbox-' + y.id;
+                box.innerHTML = `
+                    <div class="j-box-head">
+                        <span class="j-badge">${y.badge}</span>
+                        <span class="j-saved-dot" title="Entry saved"></span>
+                    </div>
+                    <p class="j-label">How we celebrated</p>
+                    <textarea class="j-text" id="jt-${y.id}" placeholder="Write about what you did…" rows="3">${saved && saved.text ? saved.text : ''}</textarea>
+                    <div class="j-photo-row" id="jphrow-${y.id}">
+                        <label class="j-upload-label">
+                            📷 Add photo
+                            <input type="file" class="j-file-input" accept="image/*" onchange="handleJPhoto('${y.id}', this)"/>
+                        </label>
+                    </div>
+                    <p class="j-auto-saved" id="jas-${y.id}">Saved ♥</p>`;
+                grid.appendChild(box);
+                if (saved && saved.photos) saved.photos.forEach((src, i) => appendThumb(y.id, src, i));
+                const ta = document.getElementById('jt-' + y.id);
+                ta.addEventListener('blur', () => autoSaveEntry(y.id));
+                ta.addEventListener('input', debounce(() => autoSaveEntry(y.id), 1200));
+            });
+        }
+
+        function handleJPhoto(id, input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                compressImage(e.target.result, compressed => {
+                    const saved = loadJEntry(id) || {};
+                    if (!saved.photos) saved.photos = [];
+                    if (saved.photos.length >= 3) { alert('Max 3 photos per year.'); return; }
+                    const idx = saved.photos.length;
+                    saved.photos.push(compressed);
+                    localStorage.setItem('lls-j-' + id, JSON.stringify(saved));
+                    appendThumb(id, compressed, idx);
+                    markSaved(id);
+                });
+            };
+            reader.readAsDataURL(file);
+            input.value = '';
+        }
+
+        function appendThumb(id, src, idx) {
+            const row = document.getElementById('jphrow-' + id);
+            const thumb = document.createElement('div');
+            thumb.className = 'j-thumb'; thumb.id = 'jthumb-' + id + '-' + idx;
+            thumb.innerHTML = `<img src="${src}" alt="photo"/><button class="j-thumb-remove" onclick="removeJPhoto('${id}',${idx})">×</button>`;
+            row.appendChild(thumb);
+        }
+
+        function removeJPhoto(id, idx) {
+            const saved = loadJEntry(id) || {};
+            if (saved.photos) { saved.photos.splice(idx, 1); localStorage.setItem('lls-j-' + id, JSON.stringify(saved)); }
+            const row = document.getElementById('jphrow-' + id);
+            row.querySelectorAll('.j-thumb').forEach(t => t.remove());
+            if (saved.photos) saved.photos.forEach((src, i) => appendThumb(id, src, i));
+        }
+
+        function autoSaveEntry(id) {
+            const text = document.getElementById('jt-' + id).value.trim();
+            const saved = loadJEntry(id) || {};
+            saved.text = text;
+            localStorage.setItem('lls-j-' + id, JSON.stringify(saved));
+            markSaved(id);
+            const box = document.getElementById('jbox-' + id);
+            if (text) box.classList.add('has-entry');
+            else box.classList.remove('has-entry');
+        }
+
+        function markSaved(id) {
+            const el = document.getElementById('jas-' + id);
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 2000);
+        }
+
+        function loadJEntry(id) {
+            try { return JSON.parse(localStorage.getItem('lls-j-' + id)); } catch { return null; }
+        }
+
+        function compressImage(dataUrl, cb) {
+            const img = new Image();
+            img.onload = () => {
+                const MAX = 500;
+                let w = img.width, h = img.height;
+                if (w > MAX || h > MAX) {
+                    if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+                    else { w = Math.round(w * MAX / h); h = MAX; }
+                }
+                const c = document.createElement('canvas');
+                c.width = w; c.height = h;
+                c.getContext('2d').drawImage(img, 0, 0, w, h);
+                cb(c.toDataURL('image/jpeg', 0.65));
+            };
+            img.src = dataUrl;
+        }
+
+        function debounce(fn, ms) {
+            let t;
+            return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+        }
+
+        function exportJournal() {
+            let txt = 'OUR LOVE STORY · GABE + LAURA\nANNIVERSARY JOURNAL\n' + '═'.repeat(48) + '\n\n';
+            journalYears.forEach(y => {
+                const saved = loadJEntry(y.id);
+                txt += `${y.badge.toUpperCase()}\n${'─'.repeat(30)}\n`;
+                txt += saved && saved.text ? saved.text + '\n' : '(no entry yet)\n';
+                txt += '\n';
+            });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain' }));
+            a.download = 'gabe-laura-anniversary-journal.txt';
+            a.click();
+        }
+
+        /* Tabs */
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        /* Password */
+        function checkPassword() {
+            const inp = document.getElementById('pw-input');
+            if (inp.value.trim().toLowerCase() === VAULT_PASSWORD) {
+                document.getElementById('gate').classList.add('fade-out');
+                setTimeout(() => {
+                    document.getElementById('gate').style.display = 'none';
+                    document.getElementById('app').classList.add('visible');
+                }, 950);
+            } else {
+                inp.classList.add('shake'); inp.value = '';
+                inp.placeholder = 'Try again, love…';
+                setTimeout(() => { inp.classList.remove('shake'); inp.placeholder = '· · · · · ·'; }, 700);
+            }
+        }
+
+        document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+        document.getElementById('enter-btn').addEventListener('click', checkPassword);
+
+        buildVault();
+        buildJournal();
+    </script>
+</body>
+</html>
